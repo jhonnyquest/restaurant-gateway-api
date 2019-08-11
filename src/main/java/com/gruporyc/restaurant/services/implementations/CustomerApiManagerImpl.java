@@ -8,6 +8,7 @@ import com.gruporyc.restaurant.utilities.TextsHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class CustomerApiManagerImpl implements CustomerApiManager {
     @Override
     public SimpleResponse createCustomer(CustomerDTO customer) {
         LOGGER.info(textsHelper.getTranslation("api.customer.created.message"));
-        return new SimpleResponse(true, MockHelper.getRandomId().toString());
+        return new SimpleResponse(true, MockHelper.getRandomId().toString(), HttpStatus.CREATED.name());
     }
 
     @Override

@@ -87,7 +87,7 @@ public class ProxyEndpointController {
                 textsHelper.getTranslation("api.error.unknownError");
         }
         return  ResponseEntity.status(status)
-                .body(new SimpleResponse(false, message));
+                .body(new SimpleResponse(false, message, String.valueOf(ex.getStatusCode().value())));
 
     }
 }

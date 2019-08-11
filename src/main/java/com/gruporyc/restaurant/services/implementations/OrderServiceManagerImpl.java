@@ -6,13 +6,10 @@ import com.gruporyc.restaurant.dto.SimpleResponse;
 import com.gruporyc.restaurant.services.CustomerApiManager;
 import com.gruporyc.restaurant.services.OrderApiManager;
 import com.gruporyc.restaurant.services.OrderServiceManager;
-import com.gruporyc.restaurant.utilities.TextsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import sun.net.www.http.HttpClient;
 
 import java.util.Objects;
 
