@@ -14,7 +14,7 @@ import java.util.List;
 public interface OrderApiManager {
     /**TODO: Implement paging feature for list responses */
     List<OrderDTO> getOrders();
-    OrderDTO getOrderById(Long orderId);
+    OrderDTO getOrderById(String orderId);
     SimpleResponse createOrder(OrderDTO order);
-    void deleteOrder(Long orderId);
+    void deleteOrder(String orderId);
 }

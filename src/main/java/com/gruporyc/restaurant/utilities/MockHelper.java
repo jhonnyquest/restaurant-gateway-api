@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+
 public class MockHelper {
 
     private static final String[] NAME = {"Jhonny", "Ruben", "María", "Thiago"};
@@ -27,7 +29,7 @@ public class MockHelper {
 
     private MockHelper() {}
 
-    public static OrderDTO getOrderDtoByIdByStatus(Long orderId, Status status) {
+    public static OrderDTO getOrderDtoByIdByStatus(String orderId, Status status) {
 
         List<OrderItemDTO> itemList = getItemList(new Random().nextInt(5) + 1 );
         CustomerDTO customer = newCustomer();
@@ -56,7 +58,7 @@ public class MockHelper {
         return customer;
     }
 
-    public static CustomerDTO getCustomerById(Long customerId) {
+    public static CustomerDTO getCustomerById(String customerId) {
         CustomerDTO customer = newCustomer();
         customer.setId(customerId);
         return customer;
@@ -145,7 +147,7 @@ public class MockHelper {
         return ITEM_DESCRIPTION[new Random().nextInt(ITEM_DESCRIPTION.length - 1)];
     }
 
-    public static Long getRandomId() {
-        return (long) new Random().nextInt(NUMBER_MAX_LENGHT - 1);
+    public static String getRandomId() {
+        return UUID.randomUUID().toString();
     }
 }

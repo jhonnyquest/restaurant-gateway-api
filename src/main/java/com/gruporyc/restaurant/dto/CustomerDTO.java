@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @version 1.0.0
  */
 public class CustomerDTO {
-    private Long id;
+    private String id;
     private String names;
     private String lastNames;
     private String address1;
@@ -24,14 +24,14 @@ public class CustomerDTO {
      * @return the CustomerDTO's universal identifier
      */
     @JsonProperty("id")
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id the CustomerDTO's universal identifier
      */
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

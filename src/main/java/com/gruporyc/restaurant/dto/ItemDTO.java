@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * @version 1.0.0
  */
 public class ItemDTO {
-    private Long id;
+    private String id;
 
     @NotNull(message = "is required")
     @Min(value = 3, message = "must be greater than or equal to 3")
@@ -28,14 +28,14 @@ public class ItemDTO {
      * @return the Order ItemDTO's universal identifier
      */
     @JsonProperty("id")
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id the item's universal identifier
      */
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

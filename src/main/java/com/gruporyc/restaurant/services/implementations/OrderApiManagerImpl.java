@@ -1,18 +1,24 @@
 package com.gruporyc.restaurant.services.implementations;
 
 import com.gruporyc.restaurant.dto.OrderDTO;
+import com.gruporyc.restaurant.dto.OrderItemDTO;
 import com.gruporyc.restaurant.dto.SimpleResponse;
-import com.gruporyc.restaurant.enums.Status;
 import com.gruporyc.restaurant.services.OrderApiManager;
-import com.gruporyc.restaurant.utilities.MockHelper;
+import com.gruporyc.restaurant.utilities.RestTemplateHelper;
 import com.gruporyc.restaurant.utilities.TextsHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * CustomerApiManagerImpl: Service that implements Order operations by using Order microservice business API
@@ -33,25 +39,51 @@ public class OrderApiManagerImpl implements OrderApiManager {
         return null;
     }
 
+    @Autowired
+    private RestTemplateHelper rt;
+
+    @Value("${api.restaurant.order.endpoint}")
+    private String orderEndpoint;
+
     @Override
-    public OrderDTO getOrderById(Long orderId) {
-        /**TODO: remove mock feature when service call and logic is done*/
-        if(orderId != 0) {
-            LOGGER.info(textsHelper.getTranslation("api.order.exists.message"));
-            return null;
+    public OrderDTO getOrderById(String orderId) {
+        try{
+            ResponseEntity<OrderDTO> response = rt.processRequestGet(
+                    orderEndpoint  + "/" + orderId,  null, OrderDTO.class);
+            return response.getBody();
+        } catch(HttpClientErrorException ex) {
+            if(ex.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                return null;
         }
-        return MockHelper.getOrderDtoByIdByStatus(orderId, Status.CREATED);
+        return null;
     }
 
     @Override
     public SimpleResponse createOrder(OrderDTO order) {
-        LOGGER.info(textsHelper.getTranslation("api.order.created.message"));
-        return new SimpleResponse(true, textsHelper.getTranslation("api.order.created.message"),
-                HttpStatus.CREATED.name());
+        Map<String, Object> requestBody = new HashMap<>();
+        List<Map<String, String>> items = new ArrayList<>();
+
+        for (OrderItemDTO orderItemDTO : order.getItems()) {
+            Map<String, String> newItem = new HashMap<>();
+            newItem.put("id", orderItemDTO.getId());
+            newItem.put("name", orderItemDTO.getName());
+            newItem.put("description", orderItemDTO.getDescription());
+            newItem.put("quantity", orderItemDTO.getQuantity().toString());
+            newItem.put("price", orderItemDTO.getPrice().toString());
+            items.add(newItem);
+        }
+
+        requestBody.put("id", order.getId());
+        requestBody.put("customer_id", order.getCustomerId());
+        requestBody.put("items", items);
+
+        ResponseEntity<SimpleResponse> response = rt.processRequestPostObject(
+                orderEndpoint, requestBody, SimpleResponse.class);
+        return (response.getStatusCode() == HttpStatus.CREATED) ? response.getBody() : null;
     }
 
     @Override
-    public void deleteOrder(Long orderId) {
+    public void deleteOrder(String orderId) {
 
     }
 }

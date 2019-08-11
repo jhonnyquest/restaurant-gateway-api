@@ -14,7 +14,7 @@ import java.util.List;
 public interface CustomerApiManager {
     /**TODO: Implement paging feature for list responses */
     List<CustomerDTO> getCustomers();
-    CustomerDTO getCustomerById(Long id);
+    CustomerDTO getCustomerById(String id);
     CustomerDTO getCustomerByEmail(String email);
     SimpleResponse createCustomer(CustomerDTO customer);
     SimpleResponse updateCustomer(CustomerDTO customer);

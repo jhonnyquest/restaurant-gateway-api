@@ -41,8 +41,8 @@ public class OrderServiceManagerImpl implements OrderServiceManager {
         }
         CustomerDTO customer = customerApi.getCustomerById(order.getCustomer().getId());
 
-        Long customerId = (Objects.isNull(customer)) ?
-                Long.parseLong(customerApi.createCustomer(order.getCustomer()).getMessage()) :
+        String customerId = (Objects.isNull(customer)) ?
+                customerApi.createCustomer(order.getCustomer()).getMessage() :
                 customer.getId();
 
         order.setCustomerId(customerId);

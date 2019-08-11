@@ -13,11 +13,11 @@ import java.util.List;
  * @version 1.0.0
  */
 public class OrderDTO {
-    private Long id;
+    private String id;
     private BigDecimal total;
     private String status;
     @NotNull(message = "is required")
-    private Long customerId;
+    private String customerId;
     @NotNull(message = "is required")
     private List<OrderItemDTO> items;
     private CustomerDTO customer;
@@ -26,14 +26,14 @@ public class OrderDTO {
      * @return the Order's universal identifier
      */
     @JsonProperty("id")
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id the order universal identifier
      */
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -71,14 +71,14 @@ public class OrderDTO {
      * @return the Customer's universal identifier
      */
     @JsonProperty("customer_id")
-    public Long getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
     /**
      * @param customerId the customer universal identifier
      */
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
