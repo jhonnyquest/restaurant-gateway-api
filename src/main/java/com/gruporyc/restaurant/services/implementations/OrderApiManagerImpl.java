@@ -2,6 +2,7 @@ package com.gruporyc.restaurant.services.implementations;
 
 import com.gruporyc.restaurant.dto.OrderDTO;
 import com.gruporyc.restaurant.dto.OrderItemDTO;
+import com.gruporyc.restaurant.dto.OrderResponseDTO;
 import com.gruporyc.restaurant.dto.SimpleResponse;
 import com.gruporyc.restaurant.services.OrderApiManager;
 import com.gruporyc.restaurant.utilities.RestTemplateHelper;
@@ -15,10 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * CustomerApiManagerImpl: Service that implements Order operations by using Order microservice business API
@@ -46,10 +44,10 @@ public class OrderApiManagerImpl implements OrderApiManager {
     private String orderEndpoint;
 
     @Override
-    public OrderDTO getOrderById(String orderId) {
+    public OrderResponseDTO getOrderById(String orderId) {
         try{
-            ResponseEntity<OrderDTO> response = rt.processRequestGet(
-                    orderEndpoint  + "/" + orderId,  null, OrderDTO.class);
+            ResponseEntity<OrderResponseDTO> response = rt.processRequestGet(
+                    orderEndpoint  + "/" + orderId,  null, OrderResponseDTO.class);
             return response.getBody();
         } catch(HttpClientErrorException ex) {
             if(ex.getStatusCode().equals(HttpStatus.NOT_FOUND))
@@ -85,5 +83,50 @@ public class OrderApiManagerImpl implements OrderApiManager {
     @Override
     public void deleteOrder(String orderId) {
 
+    }
+
+    @Override
+    public List<OrderResponseDTO> getActiveOrders() {
+        try{
+            ResponseEntity<OrderResponseDTO[]> response = rt.processRequestGet(
+                    orderEndpoint  + "/" + "active",  null, OrderResponseDTO[].class);
+            return Arrays.asList(Objects.requireNonNull(response.getBody()));
+        } catch(HttpClientErrorException ex) {
+            if(ex.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                return null;
+        }
+        return null;
+    }
+
+    @Override
+    public SimpleResponse updateOrderItemStatus(String orderId, String itemId, String status) {
+        try{
+            Map<String, String> requestBody = new HashMap<>();
+            requestBody.put("status", status);
+            ResponseEntity<SimpleResponse> response = rt.processRequestPost(
+                    orderEndpoint  + "/" + orderId + "/item/" + itemId + "/status",
+                    requestBody, SimpleResponse.class);
+            return Objects.requireNonNull(response.getBody());
+        } catch(HttpClientErrorException ex) {
+            if(ex.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                return null;
+        }
+        return null;
+    }
+
+    @Override
+    public SimpleResponse updateOrderStatus(String orderId, String status) {
+        try{
+            Map<String, String> requestBody = new HashMap<>();
+            requestBody.put("status", status);
+            ResponseEntity<SimpleResponse> response = rt.processRequestPost(
+                    orderEndpoint  + "/" + orderId + "/status",
+                    requestBody, SimpleResponse.class);
+            return Objects.requireNonNull(response.getBody());
+        } catch(HttpClientErrorException ex) {
+            if(ex.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                return null;
+        }
+        return null;
     }
 }

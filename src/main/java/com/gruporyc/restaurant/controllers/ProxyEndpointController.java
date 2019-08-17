@@ -7,10 +7,9 @@ import com.gruporyc.restaurant.utilities.TextsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 
@@ -48,6 +47,88 @@ public class ProxyEndpointController {
         ResponseEntity<Object> responseEntity;
         try {
             responseEntity = ResponseEntity.ok(orderService.createOrder(newOrder));
+        } catch (HttpClientErrorException ex) {
+            responseEntity = setErrorResponse(ex);
+        }
+        return responseEntity;
+    }
+
+    /**
+     * getActiveOrders: Method to get active orders into platform
+     * @author jmunoz
+     * @since 13/08/2019
+     * @see ResponseEntity<Object>
+     */
+    @RequestMapping(value = "orders/active", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Object> getActiveOrders() {
+
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = ResponseEntity.ok(orderService.getActiveOrders());
+        } catch (HttpClientErrorException ex) {
+            responseEntity = setErrorResponse(ex);
+        }
+        return responseEntity;
+    }
+
+    /**
+     * updateOrderStatus: Method to update given order by id
+     * @author jmunoz
+     * @since 10/08/2019
+     * @param orderId Order universal identifier
+     * @param payload Request payload - status to be updated
+     * @see ResponseEntity <Object>
+     */
+    @RequestMapping(value = "orders/{orderId}/status", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<Object> updateOrderStatus(@PathVariable("orderId") String orderId,
+                                                    @RequestBody ModelMap payload) {
+
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = ResponseEntity.ok(
+                    orderService.updateOrderStatus(orderId, payload.get("status").toString()));
+        } catch (HttpClientErrorException ex) {
+            responseEntity = setErrorResponse(ex);
+        }
+        return responseEntity;
+    }
+
+    /**
+     * getOrderById: Method to get a single order given ID
+     * @author jmunoz
+     * @since 13/08/2019
+     * @see ResponseEntity<Object>
+     */
+    @RequestMapping(value = "orders/{order_id}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Object> updateOrderStatus(@PathVariable("order_id") String orderId) {
+
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = ResponseEntity.ok(orderService.getOrderById(orderId));
+        } catch (HttpClientErrorException ex) {
+            responseEntity = setErrorResponse(ex);
+        }
+        return responseEntity;
+    }
+
+    /**
+     * updateOrderItemStatus: Method to update item status from a given order
+     * @author jmunoz
+     * @param orderId Order universal identifier
+     * @param itemId Order universal identifier
+     * @param payload Request payload - status to be updated
+     * @since 13/08/2019
+     * @see ResponseEntity<Object>
+     */
+    @RequestMapping(value = "orders/{order_id}/item/{item_id}/status", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<Object> updateOrderItemStatus(@PathVariable("order_id") String orderId,
+                                                        @PathVariable("item_id") String itemId,
+                                                        @RequestBody ModelMap payload) {
+
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = ResponseEntity.ok(orderService.updateOrderItemStatus(orderId, itemId,
+                    payload.get("status").toString()));
         } catch (HttpClientErrorException ex) {
             responseEntity = setErrorResponse(ex);
         }

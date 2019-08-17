@@ -1,6 +1,7 @@
 package com.gruporyc.restaurant.services;
 
 import com.gruporyc.restaurant.dto.OrderDTO;
+import com.gruporyc.restaurant.dto.OrderResponseDTO;
 import com.gruporyc.restaurant.dto.SimpleResponse;
 
 import java.util.List;
@@ -14,7 +15,12 @@ import java.util.List;
 public interface OrderApiManager {
     /**TODO: Implement paging feature for list responses */
     List<OrderDTO> getOrders();
-    OrderDTO getOrderById(String orderId);
+    OrderResponseDTO getOrderById(String orderId);
     SimpleResponse createOrder(OrderDTO order);
     void deleteOrder(String orderId);
+    List<OrderResponseDTO> getActiveOrders();
+
+    SimpleResponse updateOrderItemStatus(String orderId, String itemId, String status);
+
+    SimpleResponse updateOrderStatus(String orderId, String status);
 }
