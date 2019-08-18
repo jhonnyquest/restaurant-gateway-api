@@ -15,6 +15,7 @@ import java.util.List;
 public class OrderResponseDTO {
     private String id;
     private BigDecimal total;
+    private String table;
     private String status;
     @NotNull(message = "is required")
     private String customerId;
@@ -51,6 +52,21 @@ public class OrderResponseDTO {
      */
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    /**
+     * @return the table that request order
+     */
+    @JsonProperty("table")
+    public String getTable() {
+        return table;
+    }
+
+    /**
+     * @param table the table that request order
+     */
+    public void setTable(String table) {
+        this.table = table;
     }
 
     /**
@@ -133,6 +149,7 @@ public class OrderResponseDTO {
         return "OrderResponseDTO{" +
                 "id='" + id + '\'' +
                 ", total=" + total +
+                ", table='" + table + '\'' +
                 ", status='" + status + '\'' +
                 ", customerId='" + customerId + '\'' +
                 ", items=" + items +
