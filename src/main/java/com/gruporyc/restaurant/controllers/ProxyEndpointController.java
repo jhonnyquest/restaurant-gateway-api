@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -42,8 +41,8 @@ public class ProxyEndpointController {
      * @see ResponseEntity<Object>
      */
     @RequestMapping("order")
-    public ResponseEntity<Object> createOrder(@Validated @RequestBody OrderDTO newOrder) {
-
+    public ResponseEntity<Object> createOrder(@RequestBody OrderDTO newOrder) {
+        System.out.println("ORDEN: " + newOrder.toString());
         ResponseEntity<Object> responseEntity;
         try {
             responseEntity = ResponseEntity.ok(orderService.createOrder(newOrder));
