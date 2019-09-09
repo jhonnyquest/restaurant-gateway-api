@@ -67,12 +67,13 @@ public class OrderApiManagerImpl implements OrderApiManager {
             newItem.put("name", orderItemDTO.getName());
             newItem.put("description", orderItemDTO.getDescription());
             newItem.put("quantity", orderItemDTO.getQuantity().toString());
-            newItem.put("price", orderItemDTO.getPrice().toString());
+            newItem.put("price", Objects.isNull(orderItemDTO.getPrice()) ? null : orderItemDTO.getPrice().toString());
             items.add(newItem);
         }
 
         requestBody.put("id", order.getId());
         requestBody.put("customer_id", order.getCustomerId());
+        requestBody.put("table", order.getTable());
         requestBody.put("items", items);
 
         ResponseEntity<SimpleResponse> response = rt.processRequestPostObject(

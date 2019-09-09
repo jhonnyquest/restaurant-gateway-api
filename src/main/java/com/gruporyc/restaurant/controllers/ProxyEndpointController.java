@@ -1,15 +1,19 @@
 package com.gruporyc.restaurant.controllers;
 
+import com.gruporyc.restaurant.dto.MessageDTO;
 import com.gruporyc.restaurant.dto.OrderDTO;
 import com.gruporyc.restaurant.dto.SimpleResponse;
 import com.gruporyc.restaurant.services.OrderServiceManager;
 import com.gruporyc.restaurant.utilities.TextsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.HashMap;
 
 
 /**
@@ -132,6 +136,24 @@ public class ProxyEndpointController {
             responseEntity = setErrorResponse(ex);
         }
         return responseEntity;
+    }
+
+    @RequestMapping(value = "/message", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> processMessage(@RequestBody MessageDTO message) {
+        String serviceResponse = "";
+        HashMap<String, String> response = new HashMap<>();
+        try {
+            switch(message.getQueryResult().getIntent().getDisplayName()) {
+                case "createOrder" :
+                    serviceResponse = orderService.createOrderFromMessage(message.getQueryResult().getQueryText());
+                    break;
+            }
+            response.put("fulfillmentText",serviceResponse);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("fulfillmentText", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     private ResponseEntity<Object> setErrorResponse(HttpClientErrorException ex) {

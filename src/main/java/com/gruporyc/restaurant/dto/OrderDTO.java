@@ -18,6 +18,7 @@ public class OrderDTO {
     private String status;
     @NotNull(message = "is required")
     private String customerId;
+    private String table;
     @NotNull(message = "is required")
     private List<OrderItemDTO> items;
     private CustomerDTO customer;
@@ -83,6 +84,21 @@ public class OrderDTO {
     }
 
     /**
+     * @return Table that generate the order if customer is in site
+     */
+    @JsonProperty("table")
+    public String getTable() {
+        return table;
+    }
+
+    /**
+     * @param table Table that generate the order if customer is in site
+     */
+    public void setTable(String table) {
+        this.table = table;
+    }
+
+    /**
      * @return the list of order items
      */
     @JsonProperty("line_items")
@@ -116,11 +132,13 @@ public class OrderDTO {
     @Override
     public String toString() {
         return "OrderDTO{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", total=" + total +
                 ", status='" + status + '\'' +
-                ", items='" + items + '\'' +
-                ", customerId=" + customerId +
+                ", customerId='" + customerId + '\'' +
+                ", table='" + table + '\'' +
+                ", items=" + items +
+                ", customer=" + customer +
                 '}';
     }
 }

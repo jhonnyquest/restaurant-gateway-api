@@ -1,12 +1,10 @@
 package com.gruporyc.restaurant.services.implementations;
 
-import com.gruporyc.restaurant.dto.CustomerDTO;
-import com.gruporyc.restaurant.dto.OrderDTO;
-import com.gruporyc.restaurant.dto.OrderResponseDTO;
-import com.gruporyc.restaurant.dto.SimpleResponse;
+import com.gruporyc.restaurant.dto.*;
 import com.gruporyc.restaurant.services.CustomerApiManager;
 import com.gruporyc.restaurant.services.OrderApiManager;
 import com.gruporyc.restaurant.services.OrderServiceManager;
+import com.gruporyc.restaurant.utilities.TextsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -14,6 +12,8 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Objects;
+
+import static com.gruporyc.restaurant.utilities.MessageHelper.parseOrder;
 
 /**
  * OrderServiceManagerImpl: Service that implements Order operations by using microservices business APIs
@@ -28,6 +28,8 @@ public class OrderServiceManagerImpl implements OrderServiceManager {
     private CustomerApiManager customerApi;
     @Autowired
     private OrderApiManager orderApi;
+    @Autowired
+    private TextsHelper textsHelper;
 
     /**
      * createOrder: Method to create a new order properly, by using Customer and Order microservice APIs
@@ -77,5 +79,19 @@ public class OrderServiceManagerImpl implements OrderServiceManager {
     @Override
     public SimpleResponse updateOrderStatus(String orderId, String status) {
         return orderApi.updateOrderStatus(orderId, status);
+    }
+
+    @Override
+    public String createOrderFromMessage(String queryResult) {
+        OrderDTO order = parseOrder(queryResult);
+        if(Objects.isNull(order)) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+        }
+        SimpleResponse response = orderApi.createOrder(order);
+        if(response.isSuccess()) {
+            return textsHelper.getTranslation("api.order.created.message");
+        } else {
+            return textsHelper.getTranslation("api.order.notCreated.message");
+        }
     }
 }

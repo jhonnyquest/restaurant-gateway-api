@@ -22,4 +22,6 @@ public interface OrderServiceManager{
     SimpleResponse updateOrderItemStatus(String orderId, String itemId, String status);
 
     SimpleResponse updateOrderStatus(String orderId, String status);
+
+    String createOrderFromMessage(String queryResult);
 }
