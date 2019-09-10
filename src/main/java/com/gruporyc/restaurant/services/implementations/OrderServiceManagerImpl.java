@@ -43,7 +43,7 @@ public class OrderServiceManagerImpl implements OrderServiceManager {
         if(Objects.nonNull(orderApi.getOrderById(order.getId()))) {
             throw new HttpClientErrorException(HttpStatus.CONFLICT);
         }
-        CustomerDTO customer = customerApi.getCustomerById(order.getCustomer().getId());
+        CustomerDTO customer = customerApi.getCustomerByEmail(order.getCustomer().getEmail());
 
         String customerId = (Objects.isNull(customer)) ?
                 customerApi.createCustomer(order.getCustomer()).getMessage() :

@@ -56,9 +56,16 @@ public class CustomerApiManagerImpl implements CustomerApiManager {
         return null;
     }
 
-    /**TODO: for production environment please implement this method*/
     @Override
     public CustomerDTO getCustomerByEmail(String email) {
+        try{
+            ResponseEntity<CustomerDTO> response = rt.processRequestGet(
+                    customerEndpoint + "/email/" + email,null,CustomerDTO.class);
+            return response.getBody();
+        } catch(HttpClientErrorException ex) {
+            if(ex.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                return null;
+        }
         return null;
     }
 
