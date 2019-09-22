@@ -68,6 +68,8 @@ public class OrderServiceManagerImpl implements OrderServiceManager {
     @Override
     public OrderResponseDTO getOrderById(String orderId) {
         OrderResponseDTO orderById = orderApi.getOrderById(orderId);
+
+        System.out.println("item: " + orderById.toString());
         return orderById;
     }
 

@@ -63,7 +63,7 @@ public class OrderApiManagerImpl implements OrderApiManager {
 
         for (OrderItemDTO orderItemDTO : order.getItems()) {
             Map<String, String> newItem = new HashMap<>();
-            newItem.put("id", orderItemDTO.getId());
+            newItem.put("product_id", orderItemDTO.getId());
             newItem.put("name", orderItemDTO.getName());
             newItem.put("description", orderItemDTO.getDescription());
             newItem.put("quantity", orderItemDTO.getQuantity().toString());
